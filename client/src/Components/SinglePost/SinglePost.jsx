@@ -25,7 +25,7 @@ function SinglePost() {
             setTitle(res.data.title);
             setDesc(res.data.desc);
         };
-        getPost()
+        getPost();
     }, [path]);
 
     const handleDelete = async () => {
@@ -37,13 +37,11 @@ function SinglePost() {
     }
     const handleUpdate = async () => {
         try {
-            await axios.put(`/posts/${post._id}`, {
-                username: user.username,
-                title,
-                desc,
-            });
-            window.location.reload();
-        } catch (err) {}
+            await axios.put(`/posts/${post._id}`,  { username: user.username, title, desc, } );
+            setUpdateMode(false);
+        } catch (err) { 
+            console.log(err);
+        }
 
     }
     return (
@@ -62,7 +60,7 @@ function SinglePost() {
                     onChange={(e) => setTitle(e.target.value)}
                 /> : (
                     <h1 className="singlePostTitle">
-                        {post.title}
+                        {title}
                         {
                             post.username === user?.username && (
                                 <div className="singlePostEdit">
@@ -90,13 +88,15 @@ function SinglePost() {
                     onChange={(e) => setDesc(e.target.value)}
                 /> : (
                     <p className="singlePostDesc">
-                        {post.desc}
-                    </p>
+                        {desc}
+                    </p> 
                 )}
-                <button className="singlePostButton" onClick={handleUpdate}>Update</button>
+                { updateMode && (
+                    <button className="singlePostButton" onClick={handleUpdate}>Update</button>
+                )}
+                
             </div >
         </div >
     )
 }
-
-export default SinglePost
+export default SinglePost;
